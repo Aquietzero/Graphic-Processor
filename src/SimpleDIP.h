@@ -58,6 +58,11 @@ private slots:
 
 	void originalImage();
 
+    void fft();
+    void ifft();
+    void LPGF();
+    void HPGF();
+
 private:
 	bool okToContinue();
 	void writeSettings();
@@ -121,6 +126,14 @@ private:
 	QAction* unsharpMaskingAction;
 	QAction* highBoostAction;
 
+//--fourier menu
+    QMenu* fftMenu;
+    QAction* fftAction;
+    QAction* ifftAction;
+    QAction* LPGFAction;
+    QAction* HPGFAction;
+
+// others
 	QDockWidget* toolDockWidget;
 	QDockWidget* infoDockWidget;
 
@@ -129,6 +142,7 @@ private:
 	CentralArea* centralArea;
 	ToolTabs* tools;
 	Information* info;
+
 
 	int prevTabIndex;
 };

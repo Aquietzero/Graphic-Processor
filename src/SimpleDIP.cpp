@@ -389,6 +389,43 @@ void SimpleDIP::highBoostEnhance() {
 	}
 }
 
+void SimpleDIP::fft() {
+    if (centralArea->image->img != NULL) {
+        centralArea->image->tempSaveImage();
+        centralArea->image->spectrum();
+        tools->resetToolTabs();
+        emit imageModified();
+    }
+}
+
+void SimpleDIP::ifft() {
+    if (centralArea->image->img != NULL) {
+        centralArea->image->tempSaveImage();
+        centralArea->image->inverseSpectrum();
+        tools->resetToolTabs();
+        emit imageModified();
+    }
+}
+
+
+void SimpleDIP::LPGF() {
+    if (centralArea->image->img != NULL) {
+        centralArea->image->tempSaveImage();
+        centralArea->image->lowpassGaussian(30);
+        tools->resetToolTabs();
+        emit imageModified();
+    }
+}
+
+void SimpleDIP::HPGF() {
+    if (centralArea->image->img != NULL) {
+        centralArea->image->tempSaveImage();
+        centralArea->image->highpassGaussian(160);
+        tools->resetToolTabs();
+        emit imageModified();
+    }
+}
+
 void SimpleDIP::createActions() {
 	// open option in menubar
 	openAction = new QAction(tr("&Open..."), this);
@@ -504,6 +541,31 @@ void SimpleDIP::createActions() {
 	connect(highBoostAction, SIGNAL(triggered()),
 			this, SLOT(highBoostEnhance()));
 
+    fftAction = new QAction(tr("FFT"), this);
+    fftAction->setStatusTip(
+            tr("Calculate the fourier transformation of the current "
+               "image."));
+    connect(fftAction, SIGNAL(triggered()),
+            this, SLOT(fft()));
+
+    ifftAction = new QAction(tr("IFFT"), this);
+    ifftAction->setStatusTip(
+            tr("Calculate the fourier transformation of the current "
+               "image."));
+    connect(ifftAction, SIGNAL(triggered()),
+            this, SLOT(ifft()));
+
+    LPGFAction = new QAction(tr("LP Gaussian Filter"), this);
+    LPGFAction->setStatusTip(
+            tr("Using Gaussian lowpass filter to blur the image"));
+    connect(LPGFAction, SIGNAL(triggered()),
+            this, SLOT(LPGF()));
+
+    HPGFAction = new QAction(tr("HP Gaussian Filter"), this);
+    HPGFAction->setStatusTip(
+            tr("Using Gaussian lowpass filter to blur the image"));
+    connect(HPGFAction, SIGNAL(triggered()),
+            this, SLOT(HPGF()));
 }
 
 void SimpleDIP::createMenus() {
@@ -553,6 +615,12 @@ void SimpleDIP::createMenus() {
 	edgeDetectMenu = new QMenu(tr("Edge &Detect"));
 	edgeDetectMenu->addAction(laplaceAction);
 	filterMenu->addMenu(edgeDetectMenu);
+
+    fftMenu = menuBar()->addMenu(tr("FFT")); 
+    fftMenu->addAction(fftAction);
+    fftMenu->addAction(ifftAction);
+    fftMenu->addAction(LPGFAction);
+    fftMenu->addAction(HPGFAction);
 }
 
 void SimpleDIP::createStatusBar() {

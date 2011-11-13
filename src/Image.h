@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QPainter>
 #include <QImage>
+#include <fftw3.h>
+#include <cmath>
 
 class Image : public QWidget {
 
@@ -63,13 +65,24 @@ public:
 	void add(QImage otherImg);
 	void sub(QImage otherImg);
 	void scale(const int factor);
+
+    // fourier transformation
+    void fft();
+    void ifft();
+    void spectrum();
+    void inverseSpectrum();
+    void lowpassGaussian(double freq);
+    void highpassGaussian(double freq);
 protected:
 	void paintEvent(QPaintEvent* event);
 
 public:
 	QImage* img;
 	QImage* tempImg;
-	QImage* oldImg;
+	QImage* oldImg;    
+    QImage* fftImg;
+    fftw_complex* fftRst;
+
 	QString imgName;
 	int* imgHistogramR;
 	int* imgHistogramG;
