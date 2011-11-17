@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'Information.h'
 **
-** Created: Sun Nov 13 19:33:23 2011
+** Created: Wed Nov 16 18:21:23 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "src/Information.h"
+#include "Information.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'Information.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62

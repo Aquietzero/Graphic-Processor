@@ -5,7 +5,9 @@
 #include <QPainter>
 #include <QImage>
 #include <fftw3.h>
-#include <cmath>
+#include <algorithm>
+
+#include "Random.h"
 
 class Image : public QWidget {
 
@@ -51,10 +53,14 @@ public:
 	void expandHalftoning(const int r, const int c, int** arr);
 
 	// spatial filtering
-	void spatialFiltering(const int l, int** filter);
+	void spatialFiltering(
+            const int l, int** filter, int(*filterFunc)(int, int*), bool linear);
 	void blur();
 	void weightedBlur();
 	void laplace();
+    void medianFiltering();
+    void maximumFiltering();
+    void minimumFiltering();
 
 	// enhance
 	void laplaceEnhance();
@@ -73,6 +79,11 @@ public:
     void inverseSpectrum();
     void lowpassGaussian(double freq);
     void highpassGaussian(double freq);
+
+    // noise generation
+    void gaussianNoise(double mean, double standardDeviation);
+    void impulseNoise(double pa, double pb);
+
 protected:
 	void paintEvent(QPaintEvent* event);
 
@@ -88,5 +99,9 @@ public:
 	int* imgHistogramG;
 	int* imgHistogramB;
 };
+
+int median(int l, int* window);
+int maximum(int l, int* window);
+int minimum(int l, int* window);
 
 #endif

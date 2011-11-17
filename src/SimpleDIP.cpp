@@ -339,6 +339,36 @@ void SimpleDIP::laplaceTransform() {
 	}
 }
 
+void SimpleDIP::medianFiltering() {
+	if (centralArea->image->img != NULL) {
+		centralArea->image->tempSaveImage();
+		centralArea->image->medianFiltering();
+		setHistograms();
+		tools->resetToolTabs();
+		emit imageModified();
+	}
+}
+
+void SimpleDIP::maximumFiltering() {
+	if (centralArea->image->img != NULL) {
+		centralArea->image->tempSaveImage();
+		centralArea->image->maximumFiltering();
+		setHistograms();
+		tools->resetToolTabs();
+		emit imageModified();
+	}
+}
+
+void SimpleDIP::minimumFiltering() {
+	if (centralArea->image->img != NULL) {
+		centralArea->image->tempSaveImage();
+		centralArea->image->minimumFiltering();
+		setHistograms();
+		tools->resetToolTabs();
+		emit imageModified();
+	}
+}
+
 void SimpleDIP::blur() {
 	if (centralArea->image->img != NULL) {
 		centralArea->image->tempSaveImage();
@@ -426,7 +456,76 @@ void SimpleDIP::HPGF() {
     }
 }
 
+void SimpleDIP::gaussianNoise() {
+    GaussianNoiseDialog* settings = new GaussianNoiseDialog;
+
+    connect(settings, SIGNAL(closeAndApplySettings()),
+            this, SLOT(tempSave()));
+    connect(settings, SIGNAL(applySettings(int, int)),
+            this, SLOT(addGaussianNoise(int, int)));
+    connect(settings, SIGNAL(closeNotApplySettings()),
+            this, SLOT(tempRestore()));
+}
+
+void SimpleDIP::addGaussianNoise(int mean, int sd) {
+    if (centralArea->image->img != NULL) {
+        centralArea->image->gaussianNoise(mean, sd);
+        setHistograms();
+        tools->resetToolTabs();
+        emit imageModified();
+    }
+}
+
+void SimpleDIP::impulseNoise() {
+    ImpulseNoiseDialog* settings = new ImpulseNoiseDialog;
+
+    connect(settings, SIGNAL(closeAndApplySettings()),
+            this, SLOT(tempSave()));
+    connect(settings, SIGNAL(applySettings(double, double)),
+            this, SLOT(addImpulseNoise(double, double)));
+    connect(settings, SIGNAL(closeNotApplySettings()),
+            this, SLOT(tempRestore()));
+}
+
+void SimpleDIP::addImpulseNoise(double pa, double pb) {
+    if (centralArea->image->img != NULL) {
+        centralArea->image->impulseNoise(pa, pb);
+        setHistograms();
+        tools->resetToolTabs();
+        emit imageModified();
+    }
+}
+
+void SimpleDIP::spatialFiltering() {
+    SpatialFilteringDialog* settings = new SpatialFilteringDialog;
+
+    connect(settings, SIGNAL(closeAndApplySettings()),
+            this, SLOT(tempSave()));
+    connect(settings, SIGNAL(applySettings(int**)),
+            this, SLOT(applySpatialFiltering(int**)));
+    connect(settings, SIGNAL(closeNotApplySettings()),
+            this, SLOT(tempRestore()));
+}
+
+void SimpleDIP::applySpatialFiltering(int** filter) {
+     if (centralArea->image->img != NULL) {
+        centralArea->image->spatialFiltering(3, filter, NULL, true);
+        setHistograms();
+        tools->resetToolTabs();
+        emit imageModified();
+    }
+}
+
+
 void SimpleDIP::createActions() {
+    createFileMenuActions();
+    createToolMenuActions();
+    createColorMenuActions();
+    createFilterMenuActions();
+    createFFTMenuActions();
+}
+
+void SimpleDIP::createFileMenuActions() {
 	// open option in menubar
 	openAction = new QAction(tr("&Open..."), this);
 	openAction->setShortcut(QKeySequence::Open);
@@ -450,14 +549,17 @@ void SimpleDIP::createActions() {
 	quitAction->setShortcut(tr("Ctrl+Q"));
 	quitAction->setStatusTip(tr("Exit the application"));
 	connect(quitAction, SIGNAL(triggered()), this, SLOT(close()));	
+}
 
-	// color menu actions
+void SimpleDIP::createToolMenuActions() {
 	originalImageAction = new QAction(tr("Original Image"), this);
 	originalImageAction->setStatusTip(
 			tr("Redo down to the original image"));
 	connect(originalImageAction, SIGNAL(triggered()),
 			this, SLOT(originalImage()));
+}
 
+void SimpleDIP::createColorMenuActions() {
 	redChannelAction = new QAction(tr("Red Channel"), this);
 	redChannelAction->setStatusTip(
 			tr("Get the red channel of the picture"));
@@ -499,7 +601,9 @@ void SimpleDIP::createActions() {
 			tr("Fixed Halftoning"));
 	connect(fixedHalftoningAction, SIGNAL(triggered()),
 			this, SLOT(fixedHalftoning()));
+}
 
+void SimpleDIP::createFilterMenuActions() {
 	// filter menu action
 	laplaceAction = new QAction(tr("&Laplace"), this);
 	laplaceAction->setStatusTip(
@@ -541,6 +645,44 @@ void SimpleDIP::createActions() {
 	connect(highBoostAction, SIGNAL(triggered()),
 			this, SLOT(highBoostEnhance()));
 
+    gaussianNoiseAction = new QAction(tr("&Gaussian Noise"), this);
+    gaussianNoiseAction->setStatusTip(
+            tr("Add Gaussian Noise to the image."));
+    connect(gaussianNoiseAction, SIGNAL(triggered()),
+            this, SLOT(gaussianNoise()));
+
+    impulseNoiseAction = new QAction(tr("&Impulse Noise"), this);
+    impulseNoiseAction->setStatusTip(
+            tr("Add impulse noise to the image."));
+    connect(impulseNoiseAction, SIGNAL(triggered()),
+            this, SLOT(impulseNoise()));
+
+    medianFilteringAction = new QAction(tr("Median Filtering"), this);
+    medianFilteringAction->setStatusTip(
+            tr("Using median filter to filter the image."));
+    connect(medianFilteringAction, SIGNAL(triggered()),
+            this, SLOT(medianFiltering()));
+
+    maximumFilteringAction = new QAction(tr("Maximum Filtering"), this);
+    maximumFilteringAction->setStatusTip(
+            tr("Using maximum filter to filter the image."));
+    connect(maximumFilteringAction, SIGNAL(triggered()),
+            this, SLOT(maximumFiltering()));
+
+    minimumFilteringAction = new QAction(tr("Minimum Filtering"), this);
+    minimumFilteringAction->setStatusTip(
+            tr("Using minimum filter to filter the image."));
+    connect(minimumFilteringAction, SIGNAL(triggered()),
+            this, SLOT(minimumFiltering()));
+
+    spatialFilteringAction = new QAction(tr("Spatial Filtering"), this);
+    spatialFilteringAction->setStatusTip(
+            tr("General Spatial Filtering according to the given filter"));
+    connect(spatialFilteringAction, SIGNAL(triggered()),
+            this, SLOT(spatialFiltering()));
+}
+
+void SimpleDIP::createFFTMenuActions() {
     fftAction = new QAction(tr("FFT"), this);
     fftAction->setStatusTip(
             tr("Calculate the fourier transformation of the current "
@@ -572,15 +714,18 @@ void SimpleDIP::createMenus() {
 	QFont menuFont("oldEnglish", 11);
 	menuBar()->setFont(menuFont);
 
+    // file menu
 	fileMenu = menuBar()->addMenu(tr("&File"));
 	fileMenu->addAction(openAction);
 	fileMenu->addAction(saveAction);
 	fileMenu->addAction(saveAsAction);
 	fileMenu->addAction(quitAction);
 
+    // tool menu
 	toolMenu = menuBar()->addMenu(tr("&Tool"));
 	toolMenu->addAction(originalImageAction);
 
+    // color menu
 	colorMenu = menuBar()->addMenu(tr("&Color"));
 
 	channelMenu = new QMenu(tr("Channels"));
@@ -599,6 +744,7 @@ void SimpleDIP::createMenus() {
 	halftoningMenu->addAction(expandHalftoningAction);
 	colorMenu->addMenu(halftoningMenu);
 
+    // filter menu
 	filterMenu = menuBar()->addMenu(tr("Fil&ter"));
 	
 	blurMenu = new QMenu(tr("&Blur"));
@@ -616,7 +762,22 @@ void SimpleDIP::createMenus() {
 	edgeDetectMenu->addAction(laplaceAction);
 	filterMenu->addMenu(edgeDetectMenu);
 
+    noiseMenu = new QMenu(tr("&Noise"));
+    noiseMenu->addAction(gaussianNoiseAction);
+    noiseMenu->addAction(impulseNoiseAction);
+    filterMenu->addMenu(noiseMenu);
+
+    nonlinearFilteringMenu = new QMenu(tr("Non-Linear Filtering"));
+    nonlinearFilteringMenu->addAction(medianFilteringAction);
+    nonlinearFilteringMenu->addAction(maximumFilteringAction);
+    nonlinearFilteringMenu->addAction(minimumFilteringAction);
+    filterMenu->addMenu(nonlinearFilteringMenu);
+
+    filterMenu->addAction(spatialFilteringAction);
+
+    // fourier tranform menu
     fftMenu = menuBar()->addMenu(tr("FFT")); 
+
     fftMenu->addAction(fftAction);
     fftMenu->addAction(ifftAction);
     fftMenu->addAction(LPGFAction);

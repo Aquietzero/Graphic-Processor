@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'SimpleDIP.h'
 **
-** Created: Sun Nov 13 19:33:24 2011
+** Created: Thu Nov 17 00:55:51 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "src/SimpleDIP.h"
+#include "SimpleDIP.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'SimpleDIP.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
@@ -23,7 +23,7 @@ static const uint qt_meta_data_SimpleDIP[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      32,   14, // methods
+      41,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -60,11 +60,20 @@ static const uint qt_meta_data_SimpleDIP[] = {
      388,   10,   10,   10, 0x08,
      409,   10,   10,   10, 0x08,
      428,   10,   10,   10, 0x08,
-     440,   10,   10,   10, 0x08,
-     456,   10,   10,   10, 0x08,
-     462,   10,   10,   10, 0x08,
-     469,   10,   10,   10, 0x08,
-     476,   10,   10,   10, 0x08,
+     454,  447,   10,   10, 0x08,
+     483,   10,   10,   10, 0x08,
+     495,   10,   10,   10, 0x08,
+     519,  511,   10,   10, 0x08,
+     545,   10,   10,   10, 0x08,
+     566,  560,   10,   10, 0x08,
+     597,   10,   10,   10, 0x08,
+     615,   10,   10,   10, 0x08,
+     634,   10,   10,   10, 0x08,
+     653,   10,   10,   10, 0x08,
+     669,   10,   10,   10, 0x08,
+     675,   10,   10,   10, 0x08,
+     682,   10,   10,   10, 0x08,
+     689,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -82,8 +91,14 @@ static const char qt_meta_stringdata_SimpleDIP[] = {
     "expandHalftoning()\0laplaceTransform()\0"
     "blur()\0weightedBlur()\0laplaceEnhance()\0"
     "unsharpMaskEnhance()\0highBoostEnhance()\0"
-    "resizeImg()\0originalImage()\0fft()\0"
-    "ifft()\0LPGF()\0HPGF()\0"
+    "spatialFiltering()\0filter\0"
+    "applySpatialFiltering(int**)\0resizeImg()\0"
+    "gaussianNoise()\0mean,sd\0"
+    "addGaussianNoise(int,int)\0impulseNoise()\0"
+    "pa,pb\0addImpulseNoise(double,double)\0"
+    "medianFiltering()\0maximumFiltering()\0"
+    "minimumFiltering()\0originalImage()\0"
+    "fft()\0ifft()\0LPGF()\0HPGF()\0"
 };
 
 const QMetaObject SimpleDIP::staticMetaObject = {
@@ -143,15 +158,24 @@ int SimpleDIP::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 23: laplaceEnhance(); break;
         case 24: unsharpMaskEnhance(); break;
         case 25: highBoostEnhance(); break;
-        case 26: resizeImg(); break;
-        case 27: originalImage(); break;
-        case 28: fft(); break;
-        case 29: ifft(); break;
-        case 30: LPGF(); break;
-        case 31: HPGF(); break;
+        case 26: spatialFiltering(); break;
+        case 27: applySpatialFiltering((*reinterpret_cast< int**(*)>(_a[1]))); break;
+        case 28: resizeImg(); break;
+        case 29: gaussianNoise(); break;
+        case 30: addGaussianNoise((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 31: impulseNoise(); break;
+        case 32: addImpulseNoise((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 33: medianFiltering(); break;
+        case 34: maximumFiltering(); break;
+        case 35: minimumFiltering(); break;
+        case 36: originalImage(); break;
+        case 37: fft(); break;
+        case 38: ifft(); break;
+        case 39: LPGF(); break;
+        case 40: HPGF(); break;
         default: ;
         }
-        _id -= 32;
+        _id -= 41;
     }
     return _id;
 }

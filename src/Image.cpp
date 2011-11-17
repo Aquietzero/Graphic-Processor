@@ -638,7 +638,9 @@ void Image::expandHalftoning(const int r, const int c, int** arr) {
 /* The spatial filtering supposes that the size of the given filter 
  * is odd rather than even for advantages
  */
-void Image::spatialFiltering(const int l, int** filter) {
+void Image::spatialFiltering(
+        const int l, int** filter, int(*filterFunc)(int, int*), bool linear) {
+
 	if (img == NULL)
 		return;
 
@@ -651,9 +653,11 @@ void Image::spatialFiltering(const int l, int** filter) {
 	int weight = 0;
 
 	// get the sum of the filter
-	for (int i = 0; i < l; ++i)
-		for (int j = 0; j < l; j++)
-			weight += filter[i][j];
+    if (linear) {
+        for (int i = 0; i < l; ++i)
+            for (int j = 0; j < l; j++)
+                weight += filter[i][j];
+    }
 
 	// create an auxiliary image
 	int begin = (l - 1) / 2;
@@ -675,22 +679,43 @@ void Image::spatialFiltering(const int l, int** filter) {
 			auxImage->setPixel(i, j, auxImage->pixel(i - 1, j));
 
 	// filtering
+    int* rArr = new int[l * l];
+    int* gArr = new int[l * l];
+    int* bArr = new int[l * l];
 	for (int i = 0; i < w; ++i)
 		for (int j = 0; j < h; ++j) {
-			r = g = b = 0;
-			for (int m = 0; m < l; ++m)
-				for (int n = 0; n < l; ++n) {
-					rgb = auxImage->pixel(i + m, j + n);
-					
-					r += qRed(rgb) * filter[m][n];	
-					g += qGreen(rgb) * filter[m][n];	
-					b += qBlue(rgb) * filter[m][n];	
-				}	
-			if (weight != 0) {
-				r /= weight;
-				g /= weight;
-				b /= weight;
-			}
+            // linear filtering
+            if (linear) {
+                r = g = b = 0;
+                for (int m = 0; m < l; ++m)
+                    for (int n = 0; n < l; ++n) {
+                        rgb = auxImage->pixel(i + m, j + n);
+
+                        r += qRed(rgb) * filter[m][n];	
+                        g += qGreen(rgb) * filter[m][n];	
+                        b += qBlue(rgb) * filter[m][n];	
+                    }	
+                if (weight != 0) {
+                    r /= weight;
+                    g /= weight;
+                    b /= weight;
+                }
+            }
+
+            // nonlinear filtering
+            else {
+                for (int m = 0; m < l; ++m)
+                    for (int n = 0; n < l; ++n) {
+                        rgb = auxImage->pixel(i + m, j + n);
+
+                        rArr[m * l + n] = qRed(rgb);
+                        gArr[m * l + n] = qGreen(rgb);
+                        bArr[m * l + n] = qBlue(rgb);
+                    }
+                r = filterFunc(l, rArr);
+                g = filterFunc(l, gArr);
+                b = filterFunc(l, bArr);
+            }
 
 			r = r > 255 ? 255 : r;
 			r = r <   0 ?   0 : r;
@@ -700,7 +725,7 @@ void Image::spatialFiltering(const int l, int** filter) {
 			b = b <   0 ?   0 : b;
 	
 			img->setPixel(i, j, qRgb(r, g, b));
-			tempImg->setPixel(i, j, qRgb(r, g, b));
+			//tempImg->setPixel(i, j, qRgb(r, g, b));
 		}
 	getHistogram();
 	update();
@@ -721,7 +746,7 @@ void Image::laplace() {
 	filter[2][0] = 0;
 	filter[2][1] = 1;
 	filter[2][2] = 0;
-	spatialFiltering(3, filter);
+	spatialFiltering(3, filter, NULL, true);
 }
 
 void Image::blur() {
@@ -738,7 +763,7 @@ void Image::blur() {
 	filter[2][0] = 1;
 	filter[2][1] = 1;
 	filter[2][2] = 1;
-	spatialFiltering(3, filter);
+	spatialFiltering(3, filter, NULL, true);
 }
 
 
@@ -756,7 +781,7 @@ void Image::weightedBlur() {
 	filter[2][0] = 1;
 	filter[2][1] = 2;
 	filter[2][2] = 1;
-	spatialFiltering(3, filter);
+	spatialFiltering(3, filter, NULL, true);
 }
 
 void Image::laplaceEnhance() {
@@ -1087,4 +1112,106 @@ void Image::highpassGaussian(double freq) {
     // execute the inverse fourier transformation
     ifft();
     update();
+}
+
+void Image::gaussianNoise(double mean, double standardDeviation) {
+    int w = img->width();
+    int h = img->height();
+    int r, g, b;
+    QRgb rgb;
+    double noise;
+    
+    srand(unsigned(time(NULL)));
+    for (int i = 0; i < w; ++i)
+        for (int j = 0; j < h; ++j) {
+            noise = gaussGenerator(mean, standardDeviation); 
+            
+            rgb = tempImg->pixel(i, j);
+            r = qRed(rgb); 
+			g = qGreen(rgb);
+			b = qBlue(rgb);
+
+            r += (int)noise;
+            g += (int)noise;
+            b += (int)noise;
+
+			r = r > 255 ? 255 : r;
+			r = r <   0 ?   0 : r;
+			g = g > 255 ? 255 : g;
+			g = g <   0 ?   0 : g;
+			b = b > 255 ? 255 : b;
+			b = b <   0 ?   0 : b;
+
+			img->setPixel(i, j, qRgb(r, g, b));
+        }
+
+    getHistogram();
+    update();
+}
+
+void Image::impulseNoise(double pa, double pb) {
+    int w = img->width();
+    int h = img->height();
+    int r, g, b;
+    QRgb rgb;
+    double noise;
+
+    srand(unsigned(time(NULL)));
+    for (int i = 0; i < w; ++i)
+        for (int j = 0; j < h; ++j) {
+            noise = impulseGenerator(pa, pb);
+
+            rgb = tempImg->pixel(i, j);
+             
+            r = qRed(rgb); 
+			g = qGreen(rgb);
+			b = qBlue(rgb);
+
+            if (noise == -1)
+                r = g = b = 0;
+            else if (noise == 1)
+                r = g = b = 255;
+
+			r = r > 255 ? 255 : r;
+			r = r <   0 ?   0 : r;
+			g = g > 255 ? 255 : g;
+			g = g <   0 ?   0 : g;
+			b = b > 255 ? 255 : b;
+			b = b <   0 ?   0 : b;
+
+			img->setPixel(i, j, qRgb(r, g, b));
+        }
+    getHistogram();
+    update();
+}
+
+void Image::medianFiltering() {
+    int (*filterFunc)(int, int*) = median;
+    spatialFiltering(3, NULL, filterFunc, false);
+}
+
+
+void Image::maximumFiltering() {
+    int (*filterFunc)(int, int*) = maximum;
+    spatialFiltering(3, NULL, filterFunc, false);
+}
+
+void Image::minimumFiltering() {
+    int (*filterFunc)(int, int*) = minimum;
+    spatialFiltering(3, NULL, filterFunc, false);
+}
+
+int median(int l, int* window) {
+    sort(window, window + l * l);
+    return window[(l * l + 1) / 2];
+}
+
+int maximum(int l, int* window) {
+    sort(window, window + l * l);
+    return window[l * l - 1];
+}
+
+int minimum(int l, int* window) {
+    sort(window, window + l * l);
+    return window[0];
 }

@@ -2,9 +2,11 @@
 #define SIMPLEDIP_H
 
 #include <QMainWindow>
+
 #include "CentralArea.h"
 #include "ToolTabs.h"
 #include "Information.h"
+#include "Dialogs.h"
 
 class QAction;
 
@@ -25,7 +27,7 @@ private slots:
 	bool save();         // when the save option is selected
 	bool saveAs();       // when the saveAs option is selected
 	void tempSave();     // when the ok buttons are pressed
-	void tempRestore();  // when the ok buttons are pressed
+	void tempRestore();  // when the cancel buttons are pressed
 	void setImageModified();
 
 	// image processing slots
@@ -54,7 +56,19 @@ private slots:
 	void unsharpMaskEnhance();
 	void highBoostEnhance();
 
+    void spatialFiltering();
+    void applySpatialFiltering(int** filter);
+
 	void resizeImg();
+
+    void gaussianNoise();
+    void addGaussianNoise(int mean, int sd);
+    void impulseNoise();
+    void addImpulseNoise(double pa, double pb);
+
+    void medianFiltering();
+    void maximumFiltering();
+    void minimumFiltering();
 
 	void originalImage();
 
@@ -73,6 +87,14 @@ private:
 	void createToolDockWidget();
 	void createInfoDockWidget();
 	void createConnects();
+
+    // actions
+    void createFileMenuActions();
+    void createToolMenuActions();
+    void createColorMenuActions();
+    void createFilterMenuActions();
+    void createFFTMenuActions();
+
 
 	bool saveImage(const QString &filename);
 
@@ -126,6 +148,16 @@ private:
 	QAction* unsharpMaskingAction;
 	QAction* highBoostAction;
 
+    QMenu* noiseMenu;
+    QAction* gaussianNoiseAction;
+    QAction* impulseNoiseAction;
+
+    QMenu* nonlinearFilteringMenu;
+    QAction* medianFilteringAction;
+    QAction* maximumFilteringAction;
+    QAction* minimumFilteringAction;
+
+    QAction* spatialFilteringAction;
 //--fourier menu
     QMenu* fftMenu;
     QAction* fftAction;
