@@ -43,7 +43,9 @@ public:
 
 	// histogram equalization
 	void getHistogram();
+	void getHistogramAVG();
 	void histogramEqualization();
+	void histogramEqualizationForRGB();
 
 	// transformation
 	void resizeImage(const int rate);
@@ -54,7 +56,8 @@ public:
 
 	// spatial filtering
 	void spatialFiltering(
-            const int l, int** filter, int(*filterFunc)(int, int*), bool linear);
+            const int l, int** filter, 
+            int(*filterFunc)(int, int*), bool linear);
 	void blur();
 	void weightedBlur();
 	void laplace();
@@ -84,6 +87,12 @@ public:
     void gaussianNoise(double mean, double standardDeviation);
     void impulseNoise(double pa, double pb);
 
+    // pseudo-color process
+    void greyToPseudoColor();
+    void greyToRGB(int(*rFunc)(int),
+                   int(*gFunc)(int),
+                   int(*bFunc)(int));
+
 protected:
 	void paintEvent(QPaintEvent* event);
 
@@ -98,10 +107,14 @@ public:
 	int* imgHistogramR;
 	int* imgHistogramG;
 	int* imgHistogramB;
+	int* imgHistogramAVG;
 };
 
 int median(int l, int* window);
 int maximum(int l, int* window);
 int minimum(int l, int* window);
+int redFunc(int grey);
+int greenFunc(int grey);
+int blueFunc(int grey);
 
 #endif

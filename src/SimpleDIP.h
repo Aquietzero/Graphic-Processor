@@ -44,6 +44,7 @@ private slots:
 
 	void brightnessChange(int rate);
 	void hisEqualization();
+	void hisEqualizationAVG();
 	void fixedHalftoning();
 	void expandHalftoning();
 
@@ -128,6 +129,7 @@ private:
 
 	QMenu* autoMenu;       // submenu in color menu
 	QAction* hisEqualizationAction;
+	QAction* hisEqualizationAVGAction;
 
 	QMenu* halftoningMenu; // submenu in color menu
 	QAction* fixedHalftoningAction;

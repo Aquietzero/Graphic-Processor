@@ -168,6 +168,23 @@ void Image::getHistogram() {
 		}
 }
 
+/* Calculate the average histogram of the current image.
+ */
+void Image::getHistogramAVG() {
+	if (img == NULL)
+		return;
+
+	int w = img->width();
+	int h = img->height();
+	QRgb rgb;
+
+	imgHistogramAVG = new int[256];
+    for (int i = 0; i < 256; ++i)
+        imgHistogramAVG[i] = (imgHistogramR[i] +
+                              imgHistogramG[i] +
+                              imgHistogramB[i]) / 3.;
+}
+
 /* The following methods are all image processing methods.
  * These methods operates directly on the image. No back-
  * up image is used.
@@ -430,6 +447,32 @@ void Image::histogramEqualization() {
 			int r = 255. * (double)imgHistogramR[qRed(rgb)] / (w * h);
 			int g = 255. * (double)imgHistogramG[qGreen(rgb)] / (w * h);
 			int b = 255. * (double)imgHistogramB[qBlue(rgb)] / (w * h);
+
+			img->setPixel(i, j, qRgb(r, g, b));
+			tempImg->setPixel(i, j, qRgb(r, g, b));
+		}
+	getHistogram();
+	update();
+}
+
+void Image::histogramEqualizationForRGB() {
+	if (img == NULL)
+		return;
+
+	int w = img->width();
+	int h = img->height();
+	QRgb rgb;
+
+	for (int i = 1; i < 256; ++i) 
+		imgHistogramAVG[i] += imgHistogramAVG[i - 1];
+
+	for (int i = 0; i < w; ++i)
+		for (int j = 0; j < h; ++j) {
+			rgb = img->pixel(i, j);
+
+			int r = 255. * (double)imgHistogramAVG[qRed(rgb)] / (w * h);
+			int g = 255. * (double)imgHistogramAVG[qGreen(rgb)] / (w * h);
+			int b = 255. * (double)imgHistogramAVG[qBlue(rgb)] / (w * h);
 
 			img->setPixel(i, j, qRgb(r, g, b));
 			tempImg->setPixel(i, j, qRgb(r, g, b));
@@ -1214,4 +1257,53 @@ int maximum(int l, int* window) {
 int minimum(int l, int* window) {
     sort(window, window + l * l);
     return window[0];
+}
+
+void Image::greyToRGB(
+    int(*rFunc)(int), int(*gFunc)(int), int(*bFunc)(int)) {
+
+    if (img == NULL)
+		return;
+
+	int w = img->width();
+	int h = img->height();
+    int r, g, b;
+	QRgb rgb;
+
+	for (int i = 0; i < w; ++i)
+		for (int j = 0; j < h; ++j) {
+			rgb = tempImg->pixel(i, j);
+
+            r = rFunc(qRed(rgb));
+            g = gFunc(qGreen(rgb));
+            b = bFunc(qBlue(rgb));
+
+			img->setPixel(i, j, qRgb(r, g, b));
+		}
+	getHistogram();
+	update();
+}
+
+void Image::greyToPseudoColor() {
+    int (*rFunc)(int) = redFunc;
+    int (*gFunc)(int) = greenFunc;
+    int (*bFunc)(int) = blueFunc;
+
+    greyToRGB(rFunc, gFunc, bFunc);
+}
+
+int redFunc(int grey) {
+    if (grey >= 0 && grey < 15)
+        return 255;
+    return grey;
+}
+
+int greenFunc(int grey) {
+    if (grey >= 0 && grey < 15)
+        return 255;
+    return grey;
+}
+
+int blueFunc(int grey) {
+    return grey;
 }

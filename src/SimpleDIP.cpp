@@ -264,7 +264,22 @@ void SimpleDIP::contrastChange(int rate) {
 void SimpleDIP::hisEqualization() {
 	if (centralArea->image->img != NULL) {
 		centralArea->image->tempSaveImage();
+
 		centralArea->image->histogramEqualization();
+
+		setHistograms();
+		tools->resetToolTabs();
+		emit imageModified();
+	}
+}
+
+void SimpleDIP::hisEqualizationAVG() {
+	if (centralArea->image->img != NULL) {
+		centralArea->image->tempSaveImage();
+
+        centralArea->image->getHistogramAVG();
+        centralArea->image->histogramEqualizationForRGB();
+
 		setHistograms();
 		tools->resetToolTabs();
 		emit imageModified();
@@ -590,6 +605,13 @@ void SimpleDIP::createColorMenuActions() {
 	connect(hisEqualizationAction, SIGNAL(triggered()),
 			this, SLOT(hisEqualization()));
 
+	hisEqualizationAVGAction = new QAction(tr(
+                "Average Histogram Equalization"), this);
+	hisEqualizationAVGAction->setStatusTip(
+			tr("Average Histogram Equalization"));
+	connect(hisEqualizationAVGAction, SIGNAL(triggered()),
+			this, SLOT(hisEqualizationAVG()));
+
 	expandHalftoningAction = new QAction(tr("Expand Halftoning"), this);
 	expandHalftoningAction->setStatusTip(
 			tr("Expand Halftoning"));
@@ -737,6 +759,7 @@ void SimpleDIP::createMenus() {
 
 	autoMenu = new QMenu(tr("Auto"));
 	autoMenu->addAction(hisEqualizationAction);
+	autoMenu->addAction(hisEqualizationAVGAction);
 	colorMenu->addMenu(autoMenu);
 
 	halftoningMenu = new QMenu(tr("Halftoning"));
