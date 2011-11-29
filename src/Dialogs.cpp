@@ -192,3 +192,115 @@ void SpatialFilteringDialog::closeNotApply() {
     this->close();
 }
 
+ColorExtractDialog::ColorExtractDialog(QDialog* parent)
+    : QDialog(parent) {
+
+    QLabel* red   = new QLabel("Red:");
+    QLabel* green = new QLabel("Green:");
+    QLabel* blue  = new QLabel("Blue:");
+    QLabel* range = new QLabel("Range:");
+
+    redValue   = new QLabel("0");
+    greenValue = new QLabel("0");
+    blueValue  = new QLabel("0");
+    rangeValue = new QLabel("0");
+
+    redComponent   = new QSlider(Qt::Horizontal);
+    greenComponent = new QSlider(Qt::Horizontal);
+    blueComponent  = new QSlider(Qt::Horizontal);
+    rangeComponent = new QSlider(Qt::Horizontal);
+
+    redComponent->setRange(0, 255);
+    greenComponent->setRange(0, 255);
+    blueComponent->setRange(0, 255);
+    rangeComponent->setRange(0, 255);
+
+    apply  = new QPushButton("Apply");
+    done   = new QPushButton("Done");
+    cancel = new QPushButton("Cancel");
+
+
+    QGridLayout* sliders = new QGridLayout;
+
+    sliders->addWidget(red,   0, 0);
+    sliders->addWidget(green, 1, 0);
+    sliders->addWidget(blue,  2, 0);
+    sliders->addWidget(range, 3, 0);
+
+    sliders->addWidget(redComponent,   0, 1);
+    sliders->addWidget(greenComponent, 1, 1);
+    sliders->addWidget(blueComponent,  2, 1);
+    sliders->addWidget(rangeComponent, 3, 1);
+
+    sliders->addWidget(redValue,   0, 2);
+    sliders->addWidget(greenValue, 1, 2);
+    sliders->addWidget(blueValue,  2, 2);
+    sliders->addWidget(rangeValue, 3, 2);
+
+    QHBoxLayout* buttons = new QHBoxLayout;
+    buttons->addWidget(apply);
+    buttons->addWidget(done);
+    buttons->addWidget(cancel);
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->addLayout(sliders);
+    layout->addLayout(buttons);
+
+    connect(apply,  SIGNAL(clicked()), this, SLOT(applyNotClose()));
+    connect(done,   SIGNAL(clicked()), this, SLOT(closeAndApply()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(closeNotApply()));
+
+    connect(redComponent, SIGNAL(valueChanged(int)),
+            this, SLOT(setRedValue(int)));
+    connect(greenComponent, SIGNAL(valueChanged(int)),
+            this, SLOT(setGreenValue(int)));
+    connect(blueComponent, SIGNAL(valueChanged(int)),
+            this, SLOT(setBlueValue(int)));
+    connect(rangeComponent, SIGNAL(valueChanged(int)),
+            this, SLOT(setRangeValue(int)));
+
+    this->setLayout(layout);
+    this->show();
+}
+
+void ColorExtractDialog::setRedValue(int red) {
+    QString str;
+    str = QString("%1").arg(red);
+    redValue->setText(str);
+}
+
+void ColorExtractDialog::setGreenValue(int green) {
+    QString str;
+    str = QString("%1").arg(green);
+    greenValue->setText(str);
+}
+
+void ColorExtractDialog::setBlueValue(int blue) {
+    QString str;
+    str = QString("%1").arg(blue);
+    blueValue->setText(str);
+}
+
+void ColorExtractDialog::setRangeValue(int range) {
+    QString str;
+    str = QString("%1").arg(range);
+    rangeValue->setText(str);
+}
+
+void ColorExtractDialog::applyNotClose() {
+    emit applySettings(redComponent->value(),
+                       greenComponent->value(),
+                       blueComponent->value(),
+                       rangeComponent->value());
+}
+
+void ColorExtractDialog::closeAndApply() {
+    emit closeAndApplySettings();
+    this->close();
+}
+
+void ColorExtractDialog::closeNotApply() {
+    emit closeNotApplySettings();
+    this->close();
+}
+

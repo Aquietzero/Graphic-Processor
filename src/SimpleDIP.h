@@ -67,6 +67,9 @@ private slots:
     void impulseNoise();
     void addImpulseNoise(double pa, double pb);
 
+    void colorExtracting();
+    void applyColorExtracting(int r, int g, int b, int range);
+
     void medianFiltering();
     void maximumFiltering();
     void minimumFiltering();
@@ -120,6 +123,9 @@ private:
 
 //--color menu
 	QMenu* colorMenu;
+
+    QAction* extractColorAction;
+
 	QMenu* channelMenu;    // submenu in color menu
 	// actions of channel menu
 	QAction* redChannelAction;

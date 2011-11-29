@@ -474,6 +474,7 @@ void SimpleDIP::HPGF() {
 void SimpleDIP::gaussianNoise() {
     GaussianNoiseDialog* settings = new GaussianNoiseDialog;
 
+    centralArea->image->tempSaveImage();
     connect(settings, SIGNAL(closeAndApplySettings()),
             this, SLOT(tempSave()));
     connect(settings, SIGNAL(applySettings(int, int)),
@@ -494,6 +495,7 @@ void SimpleDIP::addGaussianNoise(int mean, int sd) {
 void SimpleDIP::impulseNoise() {
     ImpulseNoiseDialog* settings = new ImpulseNoiseDialog;
 
+    centralArea->image->tempSaveImage();
     connect(settings, SIGNAL(closeAndApplySettings()),
             this, SLOT(tempSave()));
     connect(settings, SIGNAL(applySettings(double, double)),
@@ -513,7 +515,8 @@ void SimpleDIP::addImpulseNoise(double pa, double pb) {
 
 void SimpleDIP::spatialFiltering() {
     SpatialFilteringDialog* settings = new SpatialFilteringDialog;
-
+ 
+    centralArea->image->tempSaveImage();
     connect(settings, SIGNAL(closeAndApplySettings()),
             this, SLOT(tempSave()));
     connect(settings, SIGNAL(applySettings(int**)),
@@ -531,6 +534,26 @@ void SimpleDIP::applySpatialFiltering(int** filter) {
     }
 }
 
+void SimpleDIP::colorExtracting() {
+    ColorExtractDialog* settings = new ColorExtractDialog;
+
+    centralArea->image->tempSaveImage();
+    connect(settings, SIGNAL(closeAndApplySettings()),
+            this, SLOT(tempSave()));
+    connect(settings, SIGNAL(applySettings(int, int, int, int)),
+            this, SLOT(applyColorExtracting(int, int, int, int)));
+    connect(settings, SIGNAL(closeNotApplySettings()),
+            this, SLOT(tempRestore()));
+
+}
+
+void SimpleDIP::applyColorExtracting(int r, int g, int b, int range) {
+     if (centralArea->image->img != NULL) {
+        centralArea->image->greyToPseudoColor(range, r, g, b);
+        setHistograms();
+        tools->resetToolTabs();
+    }
+}
 
 void SimpleDIP::createActions() {
     createFileMenuActions();
@@ -623,6 +646,13 @@ void SimpleDIP::createColorMenuActions() {
 			tr("Fixed Halftoning"));
 	connect(fixedHalftoningAction, SIGNAL(triggered()),
 			this, SLOT(fixedHalftoning()));
+
+	extractColorAction = new QAction(tr("Color Extraction"), this);
+	extractColorAction->setStatusTip(
+			tr("Color Extraction"));
+	connect(extractColorAction, SIGNAL(triggered()),
+			this, SLOT(colorExtracting()));
+
 }
 
 void SimpleDIP::createFilterMenuActions() {
@@ -749,6 +779,8 @@ void SimpleDIP::createMenus() {
 
     // color menu
 	colorMenu = menuBar()->addMenu(tr("&Color"));
+
+    colorMenu->addAction(extractColorAction);
 
 	channelMenu = new QMenu(tr("Channels"));
 	channelMenu->addAction(redChannelAction);

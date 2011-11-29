@@ -527,6 +527,40 @@ void Image::colorsChange(const int rateR, const int rateG,
 	update();
 }
 
+void Image::changeTone(int r_0, int g_0, int b_0) {
+	if (img == NULL)
+		return;
+
+	int w = tempImg->width();
+	int h = tempImg->height();
+    int r, g, b;
+	QRgb rgb;
+
+	for (int i = 0; i < w; ++i)
+		for (int j = 0; j < h; ++j) {
+			rgb = tempImg->pixel(i, j);
+
+			r = qRed(rgb);
+			g = qGreen(rgb);
+			b = qBlue(rgb);
+
+            r = (float)(r) * r_0 / (r_0 + g_0 + b_0);
+            g = (float)(g) * g_0 / (r_0 + g_0 + b_0);
+            b = (float)(b) * b_0 / (r_0 + g_0 + b_0);
+
+			r = r > 255 ? 255 : r;
+			r = r <   0 ?   0 : r;
+			g = g > 255 ? 255 : g;
+			g = g <   0 ?   0 : g;
+			b = b > 255 ? 255 : b;
+			b = b <   0 ?   0 : b;
+
+		    img->setPixel(i, j, qRgb(r, g, b));
+		}
+	getHistogram();
+	update();
+}
+
 void Image::resizeImage(const int rate) {
 	float r = rate / 100.;
 	float w = tempImg->width() * r;
@@ -1260,7 +1294,10 @@ int minimum(int l, int* window) {
 }
 
 void Image::greyToRGB(
-    int(*rFunc)(int), int(*gFunc)(int), int(*bFunc)(int)) {
+    int(*rFunc)(int, int, int, int, int), 
+    int(*gFunc)(int, int, int, int, int), 
+    int(*bFunc)(int, int, int, int, int), 
+    int r_0, int g_0, int b_0, int range) {
 
     if (img == NULL)
 		return;
@@ -1274,9 +1311,9 @@ void Image::greyToRGB(
 		for (int j = 0; j < h; ++j) {
 			rgb = tempImg->pixel(i, j);
 
-            r = rFunc(qRed(rgb));
-            g = gFunc(qGreen(rgb));
-            b = bFunc(qBlue(rgb));
+            r = rFunc(qRed(rgb), r_0, g_0, b_0, range);
+            g = gFunc(qGreen(rgb), r_0, g_0, b_0, range);
+            b = bFunc(qBlue(rgb), r_0, g_0, b_0, range);
 
 			img->setPixel(i, j, qRgb(r, g, b));
 		}
@@ -1284,26 +1321,28 @@ void Image::greyToRGB(
 	update();
 }
 
-void Image::greyToPseudoColor() {
-    int (*rFunc)(int) = redFunc;
-    int (*gFunc)(int) = greenFunc;
-    int (*bFunc)(int) = blueFunc;
+void Image::greyToPseudoColor(int range, int r, int g, int b) {
+    int (*rFunc)(int, int, int, int, int) = redFunc;
+    int (*gFunc)(int, int, int, int, int) = greenFunc;
+    int (*bFunc)(int, int, int, int, int) = blueFunc;
 
-    greyToRGB(rFunc, gFunc, bFunc);
+    greyToRGB(rFunc, gFunc, bFunc, r, g, b, range);
 }
 
-int redFunc(int grey) {
-    if (grey >= 0 && grey < 15)
-        return 255;
+int redFunc(int grey, int r, int g, int b, int range) {
+    if (grey >= 0 && grey < range)
+        return grey + (float)(255 - grey) * r / (r + g + b);
     return grey;
 }
 
-int greenFunc(int grey) {
-    if (grey >= 0 && grey < 15)
-        return 255;
+int greenFunc(int grey, int r, int g, int b, int range) {
+    if (grey >= 0 && grey < range)
+        return grey + (float)(255 - grey) * g / (r + g + b);
     return grey;
 }
 
-int blueFunc(int grey) {
+int blueFunc(int grey, int r, int g, int b, int range) {
+    if (grey >= 0 && grey < range)
+        return grey + (float)(255 - grey) * b / (r + g + b);
     return grey;
 }

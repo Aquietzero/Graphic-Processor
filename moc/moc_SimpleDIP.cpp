@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'SimpleDIP.h'
 **
-** Created: Thu Nov 17 00:55:51 2011
+** Created: Tue Nov 29 23:16:51 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_SimpleDIP[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      41,   14, // methods
+      44,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -52,28 +52,31 @@ static const uint qt_meta_data_SimpleDIP[] = {
      253,  165,   10,   10, 0x08,
      275,   10,   10,   10, 0x08,
      293,   10,   10,   10, 0x08,
-     311,   10,   10,   10, 0x08,
-     330,   10,   10,   10, 0x08,
-     349,   10,   10,   10, 0x08,
-     356,   10,   10,   10, 0x08,
-     371,   10,   10,   10, 0x08,
-     388,   10,   10,   10, 0x08,
+     314,   10,   10,   10, 0x08,
+     332,   10,   10,   10, 0x08,
+     351,   10,   10,   10, 0x08,
+     370,   10,   10,   10, 0x08,
+     377,   10,   10,   10, 0x08,
+     392,   10,   10,   10, 0x08,
      409,   10,   10,   10, 0x08,
-     428,   10,   10,   10, 0x08,
-     454,  447,   10,   10, 0x08,
-     483,   10,   10,   10, 0x08,
-     495,   10,   10,   10, 0x08,
-     519,  511,   10,   10, 0x08,
-     545,   10,   10,   10, 0x08,
-     566,  560,   10,   10, 0x08,
-     597,   10,   10,   10, 0x08,
-     615,   10,   10,   10, 0x08,
-     634,   10,   10,   10, 0x08,
-     653,   10,   10,   10, 0x08,
-     669,   10,   10,   10, 0x08,
-     675,   10,   10,   10, 0x08,
-     682,   10,   10,   10, 0x08,
-     689,   10,   10,   10, 0x08,
+     430,   10,   10,   10, 0x08,
+     449,   10,   10,   10, 0x08,
+     475,  468,   10,   10, 0x08,
+     504,   10,   10,   10, 0x08,
+     516,   10,   10,   10, 0x08,
+     540,  532,   10,   10, 0x08,
+     566,   10,   10,   10, 0x08,
+     587,  581,   10,   10, 0x08,
+     618,   10,   10,   10, 0x08,
+     648,  636,   10,   10, 0x08,
+     686,   10,   10,   10, 0x08,
+     704,   10,   10,   10, 0x08,
+     723,   10,   10,   10, 0x08,
+     742,   10,   10,   10, 0x08,
+     758,   10,   10,   10, 0x08,
+     764,   10,   10,   10, 0x08,
+     771,   10,   10,   10, 0x08,
+     778,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -87,15 +90,17 @@ static const char qt_meta_stringdata_SimpleDIP[] = {
     "redChange(int)\0greenChange(int)\0"
     "blueChange(int)\0colorsChange()\0"
     "contrastChange(int)\0brightnessChange(int)\0"
-    "hisEqualization()\0fixedHalftoning()\0"
-    "expandHalftoning()\0laplaceTransform()\0"
-    "blur()\0weightedBlur()\0laplaceEnhance()\0"
-    "unsharpMaskEnhance()\0highBoostEnhance()\0"
-    "spatialFiltering()\0filter\0"
-    "applySpatialFiltering(int**)\0resizeImg()\0"
-    "gaussianNoise()\0mean,sd\0"
+    "hisEqualization()\0hisEqualizationAVG()\0"
+    "fixedHalftoning()\0expandHalftoning()\0"
+    "laplaceTransform()\0blur()\0weightedBlur()\0"
+    "laplaceEnhance()\0unsharpMaskEnhance()\0"
+    "highBoostEnhance()\0spatialFiltering()\0"
+    "filter\0applySpatialFiltering(int**)\0"
+    "resizeImg()\0gaussianNoise()\0mean,sd\0"
     "addGaussianNoise(int,int)\0impulseNoise()\0"
     "pa,pb\0addImpulseNoise(double,double)\0"
+    "colorExtracting()\0r,g,b,range\0"
+    "applyColorExtracting(int,int,int,int)\0"
     "medianFiltering()\0maximumFiltering()\0"
     "minimumFiltering()\0originalImage()\0"
     "fft()\0ifft()\0LPGF()\0HPGF()\0"
@@ -150,32 +155,35 @@ int SimpleDIP::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 15: contrastChange((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 16: brightnessChange((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 17: hisEqualization(); break;
-        case 18: fixedHalftoning(); break;
-        case 19: expandHalftoning(); break;
-        case 20: laplaceTransform(); break;
-        case 21: blur(); break;
-        case 22: weightedBlur(); break;
-        case 23: laplaceEnhance(); break;
-        case 24: unsharpMaskEnhance(); break;
-        case 25: highBoostEnhance(); break;
-        case 26: spatialFiltering(); break;
-        case 27: applySpatialFiltering((*reinterpret_cast< int**(*)>(_a[1]))); break;
-        case 28: resizeImg(); break;
-        case 29: gaussianNoise(); break;
-        case 30: addGaussianNoise((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 31: impulseNoise(); break;
-        case 32: addImpulseNoise((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 33: medianFiltering(); break;
-        case 34: maximumFiltering(); break;
-        case 35: minimumFiltering(); break;
-        case 36: originalImage(); break;
-        case 37: fft(); break;
-        case 38: ifft(); break;
-        case 39: LPGF(); break;
-        case 40: HPGF(); break;
+        case 18: hisEqualizationAVG(); break;
+        case 19: fixedHalftoning(); break;
+        case 20: expandHalftoning(); break;
+        case 21: laplaceTransform(); break;
+        case 22: blur(); break;
+        case 23: weightedBlur(); break;
+        case 24: laplaceEnhance(); break;
+        case 25: unsharpMaskEnhance(); break;
+        case 26: highBoostEnhance(); break;
+        case 27: spatialFiltering(); break;
+        case 28: applySpatialFiltering((*reinterpret_cast< int**(*)>(_a[1]))); break;
+        case 29: resizeImg(); break;
+        case 30: gaussianNoise(); break;
+        case 31: addGaussianNoise((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 32: impulseNoise(); break;
+        case 33: addImpulseNoise((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 34: colorExtracting(); break;
+        case 35: applyColorExtracting((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
+        case 36: medianFiltering(); break;
+        case 37: maximumFiltering(); break;
+        case 38: minimumFiltering(); break;
+        case 39: originalImage(); break;
+        case 40: fft(); break;
+        case 41: ifft(); break;
+        case 42: LPGF(); break;
+        case 43: HPGF(); break;
         default: ;
         }
-        _id -= 41;
+        _id -= 44;
     }
     return _id;
 }

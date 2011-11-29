@@ -38,6 +38,8 @@ public:
 	void colorsChange(const int rateR, const int rateG, 
 			const int rateB, const int rateBright);
 
+    void changeTone(int r, int g, int b);
+
 	void brightness(const int rate);
 	void contrast(const int rate);
 
@@ -88,10 +90,11 @@ public:
     void impulseNoise(double pa, double pb);
 
     // pseudo-color process
-    void greyToPseudoColor();
-    void greyToRGB(int(*rFunc)(int),
-                   int(*gFunc)(int),
-                   int(*bFunc)(int));
+    void greyToPseudoColor(int range, int r, int g, int b);
+    void greyToRGB(int(*rFunc)(int, int, int, int, int),
+                   int(*gFunc)(int, int, int, int, int),
+                   int(*bFunc)(int, int, int, int, int),
+                   int r, int g, int b, int range);
 
 protected:
 	void paintEvent(QPaintEvent* event);
@@ -113,8 +116,9 @@ public:
 int median(int l, int* window);
 int maximum(int l, int* window);
 int minimum(int l, int* window);
-int redFunc(int grey);
-int greenFunc(int grey);
-int blueFunc(int grey);
+
+int redFunc(int grey, int r, int g, int b, int range);
+int greenFunc(int grey, int r, int g, int b, int range);
+int blueFunc(int grey, int r, int g, int b, int range);
 
 #endif

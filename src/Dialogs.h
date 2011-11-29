@@ -4,6 +4,7 @@
 #include <QDialog>
 
 class QSpinBox;
+class QSlider;
 class QDoubleSpinBox;
 class QLabel;
 class QPushButton;
@@ -86,6 +87,45 @@ private:
     QPushButton* cancel;
 
     QLineEdit** filterEntries;
+};
+
+class ColorExtractDialog : public QDialog {
+
+    Q_OBJECT;
+
+public:
+    ColorExtractDialog(QDialog* parent = NULL);
+
+signals:
+    void applySettings(int r, int g, int b, int range);
+    void closeAndApplySettings();
+    void closeNotApplySettings();
+
+public slots:
+    void applyNotClose();
+    void closeAndApply();
+    void closeNotApply();
+
+private slots:
+    void setRedValue(int);
+    void setGreenValue(int);
+    void setBlueValue(int);
+    void setRangeValue(int);
+
+private:
+    QPushButton* apply;
+    QPushButton* done;
+    QPushButton* cancel;
+
+    QLabel* redValue;
+    QLabel* greenValue;
+    QLabel* blueValue;
+    QLabel* rangeValue;
+
+    QSlider* redComponent;
+    QSlider* greenComponent;
+    QSlider* blueComponent;
+    QSlider* rangeComponent;
 };
 
 #endif
