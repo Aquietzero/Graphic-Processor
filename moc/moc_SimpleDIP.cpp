@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'SimpleDIP.h'
 **
-** Created: Tue Nov 29 23:16:51 2011
+** Created: Sat Dec 31 19:57:35 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_SimpleDIP[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      44,   14, // methods
+      45,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -77,6 +77,7 @@ static const uint qt_meta_data_SimpleDIP[] = {
      764,   10,   10,   10, 0x08,
      771,   10,   10,   10, 0x08,
      778,   10,   10,   10, 0x08,
+     785,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -103,7 +104,7 @@ static const char qt_meta_stringdata_SimpleDIP[] = {
     "applyColorExtracting(int,int,int,int)\0"
     "medianFiltering()\0maximumFiltering()\0"
     "minimumFiltering()\0originalImage()\0"
-    "fft()\0ifft()\0LPGF()\0HPGF()\0"
+    "fft()\0ifft()\0LPGF()\0HPGF()\0imgMatching()\0"
 };
 
 const QMetaObject SimpleDIP::staticMetaObject = {
@@ -181,9 +182,10 @@ int SimpleDIP::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 41: ifft(); break;
         case 42: LPGF(); break;
         case 43: HPGF(); break;
+        case 44: imgMatching(); break;
         default: ;
         }
-        _id -= 44;
+        _id -= 45;
     }
     return _id;
 }

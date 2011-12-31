@@ -7,6 +7,7 @@
 #include "ToolTabs.h"
 #include "Information.h"
 #include "Dialogs.h"
+#include "ImageMatching.h"
 
 class QAction;
 
@@ -81,6 +82,8 @@ private slots:
     void LPGF();
     void HPGF();
 
+    void imgMatching();
+
 private:
 	bool okToContinue();
 	void writeSettings();
@@ -98,6 +101,7 @@ private:
     void createColorMenuActions();
     void createFilterMenuActions();
     void createFFTMenuActions();
+    void createImgMatchingMenuActions();
 
 
 	bool saveImage(const QString &filename);
@@ -166,12 +170,17 @@ private:
     QAction* minimumFilteringAction;
 
     QAction* spatialFilteringAction;
+
 //--fourier menu
     QMenu* fftMenu;
     QAction* fftAction;
     QAction* ifftAction;
     QAction* LPGFAction;
     QAction* HPGFAction;
+
+//--image matching
+    QMenu* imgMatchingMenu;
+    QAction* imgMatchingAction;
 
 // others
 	QDockWidget* toolDockWidget;

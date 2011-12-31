@@ -15,7 +15,8 @@ HEADERS += CentralArea.h \
            Random.h \
            SimpleDIP.h \
            ToolTabs.h \
-           Dialogs.h 
+           Dialogs.h \
+           ImageMatching.h 
 SOURCES += CentralArea.cpp \
            Histogram.cpp \
            Image.cpp \
@@ -24,5 +25,6 @@ SOURCES += CentralArea.cpp \
            Random.cpp \
            SimpleDIP.cpp \
            ToolTabs.cpp \
-           Dialogs.cpp 
+           Dialogs.cpp \
+           ImageMatching.cpp
 LIBS += -L/home/afczero/College_Subjects/Digital_Image_Processing/fftw-3.3/ -lfftw3

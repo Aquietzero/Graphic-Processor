@@ -175,3 +175,78 @@ void TransformTab::resetTransformTab() {
 	resizeSpinBox->setValue(100);
 	resizeSlider->setValue(100);
 }
+
+ImagesTab::ImagesTab(QStringList imgNames, QWidget* parent)
+    : QWidget(parent) {
+
+    currImage = 4;
+    currPos = 0;
+
+    QHBoxLayout* imagesLayout = new QHBoxLayout;
+    QPushButton* prev = new QPushButton("<");
+    QPushButton* next = new QPushButton(">");
+
+    // Create the prev button.
+    imagesLayout->addWidget(prev);
+    // Create five slots to display the images.
+    images = new Image*[5];
+    matchingImages = imgNames;
+    for (int i = 0; i < 5; ++i) {
+        images[i] = new Image();
+        imagesLayout->addWidget(images[i]);
+    }
+    // Create the next button.
+    imagesLayout->addWidget(next);
+
+    showImages(0);
+
+    connect(prev, SIGNAL(clicked()), this, SLOT(showPrevImg()));
+    connect(next, SIGNAL(clicked()), this, SLOT(showNextImg()));
+
+    setMaximumHeight(200);        
+    setLayout(imagesLayout);
+}
+
+void ImagesTab::showImages(int begin) {
+    int width, height, size;
+    for (int i = 0; i < 5 && i < matchingImages.size(); ++i) {
+        images[i]->setImage(matchingImages[begin + i]);
+        width  = images[i]->img->width();
+        height = images[i]->img->height();
+        size = width > height ? width : height;
+        if (size > 150)
+            images[i]->resizeImage(150. * 100 / size);
+    }
+}
+
+void ImagesTab::showPrevImg() {
+    if (currImage == 4)
+        return;
+
+    if (currPos == 0) {
+        currImage--;
+        showImages(currImage - 4);
+    }
+    else {
+        currPos--;
+        showImages(currImage - 4);
+    }
+    images[currPos]->addBorder();
+    emit(changeMatchedImg(matchingImages[currImage - (4 - currPos)]));
+} 
+
+void ImagesTab::showNextImg() {
+    if (currImage >= matchingImages.size())
+        return;
+
+    if (currPos == 4) {
+        currImage++;
+        showImages(currImage - 4);
+    }
+    else {
+        showImages(currImage - 4);
+        currPos++;
+    }
+    images[currPos]->addBorder();
+    emit(changeMatchedImg(matchingImages[currImage - (4 - currPos)]));
+}

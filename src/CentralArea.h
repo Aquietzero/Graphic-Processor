@@ -15,4 +15,15 @@ public:
 	QScrollArea* imageArea;
 };
 
+class DoubleCentralArea : public QWidget {
+	Q_OBJECT;
+public:
+	DoubleCentralArea(QWidget* parent = NULL);
+
+	Image* image;
+	Image* imageMatched;
+	QScrollArea* imageArea;
+	QScrollArea* imageAreaMatched;
+};
+
 #endif

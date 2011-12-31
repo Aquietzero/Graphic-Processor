@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTabWidget>
+#include "Image.h"
 
 class QSpinBox;
 class QSlider;
@@ -61,6 +62,23 @@ public:
 	QTabWidget* toolTabs;
 	ColorTab* colorTab;
 	TransformTab* transformTab;
+};
+
+class ImagesTab : public QWidget {
+    Q_OBJECT;
+signals:
+    void changeMatchedImg(QString imgName);
+public slots:
+    void showPrevImg();
+    void showNextImg();
+public:
+    ImagesTab(QStringList imgNames, QWidget* parent = NULL);
+    void showImages(int begin);
+
+    Image** images;
+    QStringList matchingImages;
+    int currImage; // From 0 to the length of the images.
+    int currPos;   // From 0 to 5.
 };
 
 #endif

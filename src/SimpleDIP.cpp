@@ -555,12 +555,19 @@ void SimpleDIP::applyColorExtracting(int r, int g, int b, int range) {
     }
 }
 
+void SimpleDIP::imgMatching() {
+    ImageMatching* imgMatching = new ImageMatching(centralArea->image);
+    imgMatching->show();
+}
+
+
 void SimpleDIP::createActions() {
     createFileMenuActions();
     createToolMenuActions();
     createColorMenuActions();
     createFilterMenuActions();
     createFFTMenuActions();
+    createImgMatchingMenuActions();
 }
 
 void SimpleDIP::createFileMenuActions() {
@@ -762,6 +769,13 @@ void SimpleDIP::createFFTMenuActions() {
             this, SLOT(HPGF()));
 }
 
+void SimpleDIP::createImgMatchingMenuActions() {
+    imgMatchingAction = new QAction(tr("Matching"), this);
+    imgMatchingAction->setStatusTip(tr("Image Matching."));
+    connect(imgMatchingAction, SIGNAL(triggered()),
+            this, SLOT(imgMatching()));
+}
+
 void SimpleDIP::createMenus() {
 	QFont menuFont("oldEnglish", 11);
 	menuBar()->setFont(menuFont);
@@ -837,6 +851,11 @@ void SimpleDIP::createMenus() {
     fftMenu->addAction(ifftAction);
     fftMenu->addAction(LPGFAction);
     fftMenu->addAction(HPGFAction);
+
+    // image matching menu
+    imgMatchingMenu = menuBar()->addMenu(tr("Matching"));
+
+    imgMatchingMenu->addAction(imgMatchingAction);
 }
 
 void SimpleDIP::createStatusBar() {

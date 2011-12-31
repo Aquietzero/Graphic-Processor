@@ -9,6 +9,16 @@
 
 #include "Random.h"
 
+#include <QVector>
+#include <QStringList>
+#include <QString>
+
+#define RANGE 10000
+#define N_WH 8
+#define N_Partition 10
+#define N_Level 8
+#define PI 3.1415926
+
 class Image : public QWidget {
 
 	Q_OBJECT;
@@ -95,6 +105,13 @@ public:
                    int(*gFunc)(int, int, int, int, int),
                    int(*bFunc)(int, int, int, int, int),
                    int r, int g, int b, int range);
+    
+    // image matching               
+    void saveCharacteristic();
+    QStringList match();
+
+    // Highlight
+    void addBorder();
 
 protected:
 	void paintEvent(QPaintEvent* event);
@@ -111,6 +128,12 @@ public:
 	int* imgHistogramG;
 	int* imgHistogramB;
 	int* imgHistogramAVG;
+	
+	// image matching.
+    QImage* toHSI(QImage*);
+    QVector<QImage> partition(QImage*);
+    QVector<QVector<double> > histogram(QImage);//double[3][8]
+    QVector<QVector<QVector<double> > > histograms(QVector<QImage>);//double[9][3][8]
 };
 
 int median(int l, int* window);
@@ -120,5 +143,33 @@ int minimum(int l, int* window);
 int redFunc(int grey, int r, int g, int b, int range);
 int greenFunc(int grey, int r, int g, int b, int range);
 int blueFunc(int grey, int r, int g, int b, int range);
+
+class Record{
+public:
+    Record(){}
+    Record(QString);
+    Record(QVector<QVector<QVector<double> > >, int, int, QString);
+
+    QVector<QVector<QVector<double> > > histograms;
+    int width;
+    int height;
+    QString fname;
+};
+
+class Record2{
+public:
+    QString fname;
+    double similarity;
+};
+
+int quantizationH(int level);
+int quantizationS(int level);
+int quantizationI(int level);
+double histogramCompare(QVector<double>, QVector<double>);
+double imgMatching(QVector<QVector<QVector<double> > >);
+QVector<Record> ImgRecords();
+QStringList matchedImgsName(Record, QVector<Record>);
+int similarityCmp(Record2, Record2);
+
 
 #endif
