@@ -1,4 +1,4 @@
-#include "Random.h"
+#include "random.h"
 
 double gaussGenerator() {
     double x1, x2, s;
