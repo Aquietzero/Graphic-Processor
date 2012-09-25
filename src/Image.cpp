@@ -1025,6 +1025,7 @@ void Image::scale(const int factor) {
  * of the given image.
  */
 void Image::fft() {
+    /*
     int w = img->width();
     int h = img->height();
     int size = w * h * 4;
@@ -1093,9 +1094,11 @@ void Image::fft() {
     fftw_destroy_plan(p);
     fftw_free(in);
     fftw_free(out);
+    */
 }
 
 void Image::ifft() {
+    /*
     int w = img->width();
     int h = img->height();
     int size = w * h * 4;
@@ -1125,9 +1128,11 @@ void Image::ifft() {
 
     fftw_destroy_plan(p);
     fftw_free(out);
+    */
 }
     
 void Image::spectrum() {
+    /*
     int w = img->width();
     int h = img->height();
 
@@ -1139,18 +1144,22 @@ void Image::spectrum() {
             img->setPixel(i, j, fftImg->pixel(i, j));
 
     update();
+    */
 }
 
 void Image::inverseSpectrum() {
+    /*
     int w = img->width() / 2;
     int h = img->height() / 2;
 
     img = new QImage(w, h, tempImg->format());
     ifft();
     update();
+    */
 }
 
 void Image::lowpassGaussian(double freq) {
+    /*
     int w = img->width();
     int h = img->height();
     double e = 2.71828;
@@ -1173,9 +1182,11 @@ void Image::lowpassGaussian(double freq) {
     // execute the inverse fourier transformation
     ifft();
     update();
+    */
 }
  
 void Image::highpassGaussian(double freq) {
+    /*
     int w = img->width();
     int h = img->height();
     double e = 2.71828;
@@ -1198,6 +1209,7 @@ void Image::highpassGaussian(double freq) {
     // execute the inverse fourier transformation
     ifft();
     update();
+    */
 }
 
 void Image::gaussianNoise(double mean, double standardDeviation) {

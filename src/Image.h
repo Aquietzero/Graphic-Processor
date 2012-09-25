@@ -4,8 +4,8 @@
 #include <QWidget>
 #include <QPainter>
 #include <QImage>
-#include <fftw3.h>
 #include <algorithm>
+// #include <fftw3.h>
 
 #include "Random.h"
 
@@ -121,7 +121,7 @@ public:
 	QImage* tempImg;
 	QImage* oldImg;    
     QImage* fftImg;
-    fftw_complex* fftRst;
+    // fftw_complex* fftRst;
 
 	QString imgName;
 	int* imgHistogramR;
