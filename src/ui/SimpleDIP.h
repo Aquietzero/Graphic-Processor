@@ -9,6 +9,8 @@
 #include "components/Dialogs.h"
 #include "components/ImageMatching.h"
 
+using namespace std;
+
 class QAction;
 
 class SimpleDIP : public QMainWindow {
