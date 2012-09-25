@@ -3,10 +3,10 @@
 
 #include <QMainWindow>
 
-#include "CentralArea.h"
-#include "ToolTabs.h"
-#include "Information.h"
-#include "Dialogs.h"
+#include "ui/CentralArea.h"
+#include "ui/ToolTabs.h"
+#include "ui/Information.h"
+#include "ui/Dialogs.h"
 #include "ImageMatching.h"
 
 class QAction;
