@@ -1,8 +1,7 @@
 #include "Image.h"
 
 void Image::getHistogram() {
-	if (img == NULL)
-		return;
+	if (img == NULL) return;
 
 	int w = img->width();
 	int h = img->height();
@@ -27,8 +26,7 @@ void Image::getHistogram() {
 }
 
 void Image::getHistogramAVG() {
-	if (img == NULL)
-		return;
+	if (img == NULL) return;
 
 	imgHistogramAVG = new int[256];
     for (int i = 0; i < 256; ++i)
@@ -38,8 +36,7 @@ void Image::getHistogramAVG() {
 }
 
 void Image::histogramEqualization() {
-	if (img == NULL)
-		return;
+	if (img == NULL) return;
 
 	int w = img->width();
 	int h = img->height();
@@ -69,8 +66,7 @@ void Image::histogramEqualization() {
 }
 
 void Image::histogramEqualizationForRGB() {
-	if (img == NULL)
-		return;
+	if (img == NULL) return;
 
 	int w = img->width();
 	int h = img->height();
@@ -90,6 +86,68 @@ void Image::histogramEqualizationForRGB() {
 			img->setPixel(i, j, qRgb(r, g, b));
 			tempImg->setPixel(i, j, qRgb(r, g, b));
 		}
+    }
+    // Update the histogram of the equalized image.
+	getHistogram();
+	update();
+}
+
+void Image::blockHistogramEqualization() {
+	if (img == NULL) return;
+
+    // TODO make it variable.
+    int JUMP = 128;
+    int blockPixels = JUMP * JUMP;
+
+	int w = img->width();
+	int h = img->height();
+    int r, g, b, intensity;
+	QRgb rgb;
+
+    int* histogramR = new int[256];
+    int* histogramG = new int[256];
+    int* histogramB = new int[256];
+    int* histogramAVG = new int[256];
+    // For each block, execute block histogram equalization.
+    for (int i = 0; i < w; i += JUMP) {
+        for (int j = 0; j < h; j += JUMP) {
+            // Reset histogram.
+            for (int n = 0; n < 256; ++n) {
+                histogramR[n] = 0;
+                histogramG[n] = 0;
+                histogramB[n] = 0;
+            }
+            // Calculate the histogram.
+            for (int x = 0; x < JUMP; ++x) {
+                for (int y = 0; y < JUMP; ++y) {
+                    rgb = img->pixel(i + x, j + y);
+                    histogramR[qRed(rgb)]++;
+                    histogramG[qGreen(rgb)]++;
+                    histogramB[qBlue(rgb)]++;
+                }
+            }
+            // Calculate the average histogram.
+            for (int n = 0; n < 256; ++n) {
+                histogramAVG[n] = (histogramR[n] + histogramG[n] + histogramB[n]) / 3;
+            }
+            // Calculate the cumulative histogram.
+            for (int n = 1; n < 256; ++n) {
+                histogramAVG[n] += histogramAVG[n - 1];
+            }
+            // Update the image.
+            for (int x = 0; x < JUMP; ++x) {
+                for (int y = 0; y < JUMP; ++y) {
+                    rgb = img->pixel(i + x, j + y);
+
+                    r = 255 * histogramAVG[qRed(rgb)] / blockPixels;
+                    g = 255 * histogramAVG[qGreen(rgb)] / blockPixels;
+                    b = 255 * histogramAVG[qBlue(rgb)] / blockPixels;
+
+                    img->setPixel(i + x, j + y, qRgb(r, g, b));
+                    tempImg->setPixel(i + x, j + y, qRgb(r, g, b));
+                }
+            }
+        }
     }
     // Update the histogram of the equalized image.
 	getHistogram();

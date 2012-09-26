@@ -49,6 +49,7 @@ class Image : public QWidget {
     void getHistogram();
     void getHistogramAVG();
     void histogramEqualization();
+    void blockHistogramEqualization();
     void histogramEqualizationForRGB();
 
     // transformation

@@ -72,18 +72,24 @@ void SimpleDIP::createColorMenuActions() {
     connect(greyScaleAction, SIGNAL(triggered()), 
             this, SLOT(getGreyScale()));
 
-    hisEqualizationAction = new QAction(tr("Histogram Equalization"), this);
-    hisEqualizationAction->setStatusTip(
+    histogramEqualizationAction = new QAction(tr("Histogram Equalization"), this);
+    histogramEqualizationAction->setStatusTip(
             tr("Histogram Equalization"));
-    connect(hisEqualizationAction, SIGNAL(triggered()),
-            this, SLOT(hisEqualization()));
+    connect(histogramEqualizationAction, SIGNAL(triggered()),
+            this, SLOT(histogramEqualization()));
 
-    hisEqualizationAVGAction = new QAction(tr(
+    blockHistogramEqualizationAction = new QAction(tr("Block Histogram Equalization"), this);
+    blockHistogramEqualizationAction->setStatusTip(
+            tr("Block Histogram Equalization"));
+    connect(blockHistogramEqualizationAction, SIGNAL(triggered()),
+            this, SLOT(blockHistogramEqualization()));
+
+    histogramEqualizationAVGAction = new QAction(tr(
                 "Average Histogram Equalization"), this);
-    hisEqualizationAVGAction->setStatusTip(
+    histogramEqualizationAVGAction->setStatusTip(
             tr("Average Histogram Equalization"));
-    connect(hisEqualizationAVGAction, SIGNAL(triggered()),
-            this, SLOT(hisEqualizationAVG()));
+    connect(histogramEqualizationAVGAction, SIGNAL(triggered()),
+            this, SLOT(histogramEqualizationAVG()));
 
     expandHalftoningAction = new QAction(tr("Expand Halftoning"), this);
     expandHalftoningAction->setStatusTip(

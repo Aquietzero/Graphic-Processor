@@ -50,8 +50,9 @@ class SimpleDIP : public QMainWindow {
     void brightnessChange(int rate);
 
     // Histogram Equalization.
-    void hisEqualization();
-    void hisEqualizationAVG();
+    void histogramEqualization();
+    void blockHistogramEqualization();
+    void histogramEqualizationAVG();
 
     // Halftoning
     void fixedHalftoning();
@@ -150,8 +151,9 @@ class SimpleDIP : public QMainWindow {
     QAction* greyScaleAction;
 
     QMenu* autoMenu;       // submenu in color menu
-    QAction* hisEqualizationAction;
-    QAction* hisEqualizationAVGAction;
+    QAction* histogramEqualizationAction;
+    QAction* blockHistogramEqualizationAction;
+    QAction* histogramEqualizationAVGAction;
 
     QMenu* halftoningMenu; // submenu in color menu
     QAction* fixedHalftoningAction;

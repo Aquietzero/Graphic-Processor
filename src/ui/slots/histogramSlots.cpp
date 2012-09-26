@@ -15,7 +15,7 @@ void SimpleDIP::setHistograms() {
     }
 }
 
-void SimpleDIP::hisEqualization() {
+void SimpleDIP::histogramEqualization() {
     if (centralArea->image->img != NULL) {
         centralArea->image->tempSaveImage();
 
@@ -27,7 +27,19 @@ void SimpleDIP::hisEqualization() {
     }
 }
 
-void SimpleDIP::hisEqualizationAVG() {
+void SimpleDIP::blockHistogramEqualization() {
+    if (centralArea->image->img != NULL) {
+        centralArea->image->tempSaveImage();
+
+        centralArea->image->blockHistogramEqualization();
+
+        setHistograms();
+        tools->resetToolTabs();
+        emit imageModified();
+    }
+}
+
+void SimpleDIP::histogramEqualizationAVG() {
     if (centralArea->image->img != NULL) {
         centralArea->image->tempSaveImage();
 

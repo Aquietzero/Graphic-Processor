@@ -32,8 +32,9 @@ void SimpleDIP::createMenus() {
     colorMenu->addMenu(channelMenu);
 
     autoMenu = new QMenu(tr("Auto"));
-    autoMenu->addAction(hisEqualizationAction);
-    autoMenu->addAction(hisEqualizationAVGAction);
+    autoMenu->addAction(histogramEqualizationAction);
+    autoMenu->addAction(blockHistogramEqualizationAction);
+    autoMenu->addAction(histogramEqualizationAVGAction);
     colorMenu->addMenu(autoMenu);
 
     halftoningMenu = new QMenu(tr("Halftoning"));
