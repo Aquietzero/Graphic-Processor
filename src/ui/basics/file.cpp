@@ -109,17 +109,6 @@ void SimpleDIP::setImageModified() {
     setWindowModified(true);
 }
 
-void SimpleDIP::setHistograms() {
-    if (centralArea->image->img != NULL) {
-        info->histogramR->setHistogram(
-                centralArea->image->imgHistogramR, 256);
-        info->histogramG->setHistogram(
-                centralArea->image->imgHistogramG, 256);
-        info->histogramB->setHistogram(
-                centralArea->image->imgHistogramB, 256);
-    }
-}
-
 bool SimpleDIP::checkTabSwitch() {
     int currTabIndex = tools->toolTabs->currentIndex();
     if (currTabIndex == prevTabIndex) {

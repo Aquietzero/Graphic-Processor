@@ -4,6 +4,17 @@
 #include <iostream>
 #include "../SimpleDIP.h"
 
+void SimpleDIP::setHistograms() {
+    if (centralArea->image->img != NULL) {
+        info->histogramR->setHistogram(
+                centralArea->image->imgHistogramR, 256);
+        info->histogramG->setHistogram(
+                centralArea->image->imgHistogramG, 256);
+        info->histogramB->setHistogram(
+                centralArea->image->imgHistogramB, 256);
+    }
+}
+
 void SimpleDIP::hisEqualization() {
     if (centralArea->image->img != NULL) {
         centralArea->image->tempSaveImage();

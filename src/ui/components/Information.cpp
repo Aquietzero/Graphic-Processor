@@ -5,9 +5,9 @@ Information::Information(QWidget* parent)
 
 	QVBoxLayout* infoLayout = new QVBoxLayout;
 
-	QLabel* redChannelHistogram = new QLabel("<b>Red Channel Histogram</b>");
-	QLabel* greenChannelHistogram = new QLabel("<b>Green Channel Histogram</b>");
-	QLabel* blueChannelHistogram = new QLabel("<b>Blue Channel Histogram</b>");
+	QLabel* redChannelHistogram = new QLabel("Red Histogram");
+	QLabel* greenChannelHistogram = new QLabel("Green Histogram");
+	QLabel* blueChannelHistogram = new QLabel("Blue Histogram");
 	redChannelHistogram->setFixedHeight(15);
 	greenChannelHistogram->setFixedHeight(15);
 	blueChannelHistogram->setFixedHeight(15);
@@ -15,9 +15,10 @@ Information::Information(QWidget* parent)
 	int* arr = new int[256];
 	for (int i = 0; i < 256; ++i)
 		arr[i] = 0;
-	histogramR = new Histogram(arr, 256);	
-	histogramG = new Histogram(arr, 256);	
-	histogramB = new Histogram(arr, 256);	
+
+	histogramR = new Histogram(arr, 256, QColor(255, 0, 0, 50));	
+	histogramG = new Histogram(arr, 256, QColor(0, 255, 0, 50));	
+	histogramB = new Histogram(arr, 256, QColor(0, 0, 255, 50));	
 
 	infoLayout->addWidget(redChannelHistogram);
 	infoLayout->addWidget(histogramR);

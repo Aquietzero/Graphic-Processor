@@ -16,13 +16,14 @@ void Image::getHistogram() {
 		imgHistogramG[i] = 0;
 		imgHistogramB[i] = 0;
 	}
-	for (int i = 0; i < w; ++i)
+	for (int i = 0; i < w; ++i) {
 		for (int j = 0; j < h; ++j) {
 			rgb = img->pixel(i, j);
 			imgHistogramR[qRed(rgb)]++;
 			imgHistogramG[qGreen(rgb)]++;
 			imgHistogramB[qBlue(rgb)]++;
 		}
+    }
 }
 
 void Image::getHistogramAVG() {
@@ -50,7 +51,7 @@ void Image::histogramEqualization() {
 		imgHistogramB[i] += imgHistogramB[i - 1];
 	}
 
-	for (int i = 0; i < w; ++i)
+	for (int i = 0; i < w; ++i) {
 		for (int j = 0; j < h; ++j) {
 			rgb = img->pixel(i, j);
 
@@ -61,6 +62,8 @@ void Image::histogramEqualization() {
 			img->setPixel(i, j, qRgb(r, g, b));
 			tempImg->setPixel(i, j, qRgb(r, g, b));
 		}
+    }
+    // Update the histogram of the equalized image.
 	getHistogram();
 	update();
 }
@@ -76,7 +79,7 @@ void Image::histogramEqualizationForRGB() {
 	for (int i = 1; i < 256; ++i) 
 		imgHistogramAVG[i] += imgHistogramAVG[i - 1];
 
-	for (int i = 0; i < w; ++i)
+	for (int i = 0; i < w; ++i) {
 		for (int j = 0; j < h; ++j) {
 			rgb = img->pixel(i, j);
 
@@ -87,6 +90,8 @@ void Image::histogramEqualizationForRGB() {
 			img->setPixel(i, j, qRgb(r, g, b));
 			tempImg->setPixel(i, j, qRgb(r, g, b));
 		}
+    }
+    // Update the histogram of the equalized image.
 	getHistogram();
 	update();
 }

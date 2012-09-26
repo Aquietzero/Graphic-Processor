@@ -12,10 +12,11 @@ Histogram::Histogram(QWidget* parent)
 	setMinimumHeight(160);
 }
 
-Histogram::Histogram(int* arr, int n, QWidget* parent)
+Histogram::Histogram(int* arr, int n, QColor c, QWidget* parent)
 	: QWidget(parent) {
 	
 	size = n;
+    color = c;
 	data = new int[n];
 	for (int i = 0; i < size; ++i)
 		data[i] = arr[i];
@@ -30,8 +31,7 @@ void Histogram::setHistogram(int* arr, int n) {
 	if (n == size) {
 		for (int i = 0; i < n; ++i)
 			data[i] = arr[i];
-	}
-	else {
+	} else {
 		data = new int[n];
 		for (int i = 0; i < size; ++i)
 			data[i] = arr[i];
@@ -63,23 +63,24 @@ void Histogram::paintEvent(QPaintEvent* event) {
 
 	// background
 	for (int i = 0; i < 4; ++i) {
-		painter.setPen(QColor(grey, grey, grey));
-		painter.setBrush(QColor(grey, grey, grey));
+		painter.setPen(QPen(QColor(grey, grey, grey)));
+		painter.setBrush(QBrush(QColor(grey, grey, grey)));
 		painter.drawRect(x, y, bgW, bgh);
 		y += bgh;
 		grey -= 10;
 	}
 
-	// data
-	painter.setPen(QColor(0, 0, 0, 20));
-	painter.setBrush(QColor(0, 0, 0, 20));
-	int dataW = (float)(bgW - 40) / size;
-	dataW = dataW == 0 ? 1 : dataW;
-	int dataH;
-	for (int i = 0; i < size; ++i) {
-		x = dataW * i;
-		dataH = (int)((float)data[i] * bgH / max);
-		y = bgH - dataH;
-		painter.drawRect(x, y, dataW, dataH);
-	}
+    // data
+    painter.setPen(QPen(color));
+    painter.setBrush(QBrush(color));
+    int dataW = (float)(bgW - 40) / size;
+    dataW = dataW == 0 ? 1 : dataW;
+    int dataH;
+    for (int i = 0; i < size; ++i) {
+        x = dataW * i;
+        dataH = (int)((float)data[i] * bgH / max);
+        y = bgH - dataH;
+        if (y >= 0 && dataH >= 0)
+            painter.drawRect(x, y, dataW, dataH);
+    }
 }
