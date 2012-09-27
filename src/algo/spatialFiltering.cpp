@@ -30,6 +30,7 @@ void Image::spatialFiltering(
         for (int j = begin; j < h + begin; ++j)
             auxImage->setPixel(i, j, tempImg->pixel(i - begin, j - begin));
 
+    // padding
     for (int i = begin - 1; i >= 0; --i)
         for (int j = 0; j < w; ++j)
             auxImage->setPixel(j, i, auxImage->pixel(j, i + 1));
